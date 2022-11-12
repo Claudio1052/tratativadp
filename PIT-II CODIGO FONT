@@ -1,0 +1,779 @@
+Private Sub Super2_Change()
+
+Call filtro1
+
+End Sub
+
+Private Sub TextBox2_Change()
+
+Call filtro1
+
+End Sub
+
+Private Sub tratativa2_Change()
+
+Call filtro1
+
+End Sub
+
+Private Sub txt_data_AfterUpdate()
+
+
+On Error GoTo erro
+
+Dim data As Date
+data = Me.txt_data
+
+'Se o código identificar erro no preenchimento virá para este tratamento de erro para testar o que foi digitado errado
+erro:
+
+If Left(Me.txt_data, 2) > 31 Then 'retorna da esquerda para a direita os dois primeiros caracteres Ex: data 25/12/13 - retorna 25
+   MsgBox "Data preenchida de forma incorreta, dia inválido", vbExclamation, "Erro Data"
+   Me.txt_data = ""
+ElseIf Right(Left(Me.txt_data, 5), 2) > 12 Then 'concatenado, retorna os 2 caracteres da esquerda para a direita do retorno
+                                                      'Left dos 5 caracteres Esquerda direita, ou seja, Left(Me.txt_vencimento, 5) retona:ex 25/12
+                                                      'e o rigth dele retorna o 12 para sabermos o mês
+   MsgBox "Data preenchida de forma incorreta, mês inválido", vbExclamation, "Erro Data"
+   Me.txt_data = ""
+
+End If
+
+ 
+
+End Sub
+
+Private Sub txt_data_KeyPress(ByVal KeyAscii As MSForms.ReturnInteger)
+
+'*** Máscara de texto vista no vídeo 37
+'http://youtu.be/4sS5gC-pqTA
+
+txt_data.MaxLength = 10 '10/10/2014
+ Select Case KeyAscii
+      Case 8       'Aceita o BACK SPACE
+      Case 13: SendKeys "{TAB}"    'Emula o TAB
+      Case 48 To 57
+         If txt_data.SelStart = 2 Then txt_data.SelText = "/"
+         If txt_data.SelStart = 5 Then txt_data.SelText = "/"
+      Case Else: KeyAscii = 0     'Ignora os outros caracteres
+   End Select
+
+
+
+End Sub
+
+
+
+Sub filtro()
+
+Dim linha, linhalistbox As Integer
+
+Dim valor_celular As String
+
+linhalistbox = 0
+linha = 2
+
+
+lst_busca2.Clear
+
+Plan2.Select
+
+With Plan2
+
+While .Cells(linha, 1).Value <> ""
+
+
+valor_celular = .Cells(linha, 9).Value
+
+If UCase(Left(valor_celular, Len(Super.Text))) = UCase(Super.Text) Then
+
+
+With lst_busca2
+
+.AddItem
+   .List(linhalistbox, 0) = Plan2.Cells(linha, 3)
+   .List(linhalistbox, 1) = Plan2.Cells(linha, 2)
+
+
+
+   
+   End With
+   
+   With lst_busca2
+   
+
+.AddItem
+
+.List(linhalistbox, 0) = Plan2.Cells(linha, 3)
+   .List(linhalistbox, 1) = Plan2.Cells(linha, 2)
+   
+   End With
+   
+   linhalistbox = linhalistbox + 1
+   
+   End If
+   
+   
+       
+   linha = linha + 1
+   
+   Wend
+   
+   End With
+
+End Sub
+
+Sub filtro1()
+
+Dim linha, linhalistbox As Integer
+
+Dim valor_celular As String
+
+Dim w As Worksheet
+
+Set w = Sheets("Cadastro")
+
+
+linhalistbox = 0
+linha = 2
+
+
+lst_busca.Clear
+
+w.Select
+
+With w
+
+While .Cells(linha, 1).Value <> ""
+
+On Error Resume Next
+
+
+valor_celular = .Cells(linha, 3).Value
+
+If UCase(Left(valor_celular, Len(Super2.Text))) = UCase(Super2.Text) Then
+
+valor_celular = .Cells(linha, 5).Value
+
+If UCase(Left(valor_celular, Len(txt_data2.Text))) = UCase(txt_data2.Text) Then
+
+valor_celular = .Cells(linha, 8).Value
+
+If UCase(Left(valor_celular, Len(tratativa2.Text))) = UCase(tratativa2.Text) Then
+
+valor_celular = .Cells(linha, 9).Value
+
+If UCase(Left(valor_celular, Len(TextBox2.Text))) = UCase(TextBox2.Text) Then
+
+valor_celular = .Cells(linha, 10).Value
+
+If UCase(Left(valor_celular, Len(resposta3.Text))) = UCase(resposta3.Text) Then
+
+valor_celular = .Cells(linha, 11).Value
+
+If UCase(Left(valor_celular, Len(validacao.Text))) = UCase(validacao.Text) Then
+
+
+With lst_busca
+
+.AddItem
+   .List(linhalistbox, 0) = w.Cells(linha, 2)
+   .List(linhalistbox, 1) = w.Cells(linha, 7)
+   .List(linhalistbox, 2) = w.Cells(linha, 5)
+   .List(linhalistbox, 3) = w.Cells(linha, 9)
+   .List(linhalistbox, 4) = w.Cells(linha, 8)
+   .List(linhalistbox, 5) = w.Cells(linha, 10)
+   .List(linhalistbox, 6) = w.Cells(linha, 11)
+   .List(linhalistbox, 7) = w.Cells(linha, 15)
+
+
+
+
+   
+   End With
+   
+   With lst_busca
+   
+
+.AddItem
+
+  .List(linhalistbox, 0) = w.Cells(linha, 2)
+   .List(linhalistbox, 1) = w.Cells(linha, 7)
+   .List(linhalistbox, 2) = w.Cells(linha, 5)
+   .List(linhalistbox, 3) = w.Cells(linha, 9)
+   .List(linhalistbox, 4) = w.Cells(linha, 8)
+   .List(linhalistbox, 5) = w.Cells(linha, 10)
+   .List(linhalistbox, 6) = w.Cells(linha, 11)
+   .List(linhalistbox, 7) = w.Cells(linha, 15)
+   
+   
+   End With
+   
+   linhalistbox = linhalistbox + 1
+   
+   End If
+   End If
+   End If
+   End If
+   End If
+   End If
+
+  
+   
+   
+   
+   
+       
+   linha = linha + 1
+   
+   Wend
+   
+   End With
+
+End Sub
+
+
+Sub Calcular()
+
+Dim data As Date
+Dim DATA1 As Date
+
+
+data = txt_data.Value
+DATA1 = dataca.Caption
+
+If data <= DATA1 - 7 Then
+
+MsgBox "Fora do prazo de abertura", vbExclamation, data
+
+txt_data.Value = ""
+
+Else
+
+End If
+
+
+End Sub
+
+
+
+
+
+Private Sub txt_data2_Change()
+
+Call filtro1
+
+End Sub
+
+Sub Envio()
+
+  Dim OutApp As Outlook.Application
+Dim OutMail As Outlook.MailItem
+Dim texto
+
+ 
+'Criação e chamada do Objeto Outlook
+Set OutApp = CreateObject("Outlook.Application")
+Set OutMail = OutApp.CreateItem(olMailItem)
+ 
+Application.DisplayAlerts = False
+ 
+With OutMail
+
+
+ 
+.To = "kodash_yoko@hotmail.com"
+.CC = Me.Coordenador.Caption
+.BCC = ""
+
+texto = vbCrLf & Me.bomdia.Caption _
+       & vbCrLf & _
+       vbCrLf & _
+"Ola!, o seu chamado aberto com sucesso ," & " " & Me.Super.Text _
+& vbCrLf _
+& vbCrLf _
+& vbCrLf_ & "Matricula:" & Me.Matricula.Text & _
+ vbCrLf & "Nome:" & "  " & Me.NOMEC.Caption & _
+  vbCrLf & "Protocolo:" & "  " & Me.protocolo.Caption & _
+   vbCrLf & "Ocorrência:" & "  " & Me.Optionsele.Caption & _
+   vbCrLf & "Tratativa:" & "  " & Me.tratativa.Text & _
+vbCrLf & "Data da Ocorrência:" & " " & Me.txt_data.Value & _
+  vbCrLf & _
+  vbCrLf & "Detalhes:" & "  " & Me.obs.Text & _
+  vbCrLf & _
+ vbCrLf & "Por gentileza Aguardar o retorno."
+
+.Subject = "..::Tratativa de DP Abertura::.."
+
+.Body = texto
+
+.Display 'Ou .Send para enviar direto
+ 
+End With
+ 
+Application.DisplayAlerts = True
+ 
+'Resetando a sessão
+Set OutMail = Nothing
+Set OutApp = Nothing
+
+
+
+
+ 
+End Sub
+
+
+Sub Envio2()
+
+  Dim OutApp As Outlook.Application
+Dim OutMail As Outlook.MailItem
+Dim texto
+
+ 
+'Criação e chamada do Objeto Outlook
+Set OutApp = CreateObject("Outlook.Application")
+Set OutMail = OutApp.CreateItem(olMailItem)
+ 
+Application.DisplayAlerts = False
+ 
+With OutMail
+
+
+ 
+.To = "kodash_yoko@hotmail.com"
+.CC = Me.Coordenador.Caption
+.BCC = ""
+
+texto = vbCrLf & Me.bomdia.Caption _
+       & vbCrLf & _
+       vbCrLf & _
+"Ola!, suas informações foram alterados com sucesso! ," & " " & Me.Super.Text _
+& vbCrLf _
+& vbCrLf _
+& vbCrLf_ & "Matricula:" & Me.Matricula.Text & _
+ vbCrLf & "Nome:" & "  " & Me.NOMEC.Caption & _
+  vbCrLf & "Protocolo:" & "  " & Me.protocolo.Caption & _
+   vbCrLf & "Ocorrência:" & "  " & Me.Optionsele.Caption & _
+   vbCrLf & "Tratativa:" & "  " & Me.tratativa.Text & _
+vbCrLf & "Data da Ocorrência:" & " " & Me.txt_data.Value & _
+  vbCrLf & _
+  vbCrLf & "Detalhes:" & "  " & Me.obs.Text & _
+  vbCrLf & _
+ vbCrLf & "Por gentileza Aguardar o retorno."
+
+.Subject = "..::Tratativa de DP Alteração::.."
+
+.Body = texto
+
+.Display 'Ou .Send para enviar direto
+ 
+End With
+ 
+Application.DisplayAlerts = True
+ 
+'Resetando a sessão
+Set OutMail = Nothing
+Set OutApp = Nothing
+
+
+
+
+ 
+End Sub
+
+
+Sub Envio3()
+
+  Dim OutApp As Outlook.Application
+Dim OutMail As Outlook.MailItem
+Dim texto
+
+ 
+'Criação e chamada do Objeto Outlook
+Set OutApp = CreateObject("Outlook.Application")
+Set OutMail = OutApp.CreateItem(olMailItem)
+ 
+Application.DisplayAlerts = False
+ 
+With OutMail
+
+
+ 
+.To = "kodash_yoko@hotmail.com"
+.CC = Me.Coordenador.Caption
+.BCC = ""
+
+texto = vbCrLf & Me.bomdia.Caption _
+       & vbCrLf & _
+       vbCrLf & _
+"Ola!,A Compensação de banco de horas foi realizado com sucesso! ," & " " & Me.Super.Text _
+& vbCrLf _
+& vbCrLf _
+& vbCrLf_ & "Matricula:" & Me.Matricula.Text & _
+ vbCrLf & "Nome:" & "  " & Me.NOMEC.Caption & _
+  vbCrLf & "Protocolo:" & "  " & Me.protocolo.Caption & _
+   vbCrLf & "Ocorrência:" & "  " & Me.Optionsele.Caption & _
+   vbCrLf & "Tratativa:" & "  " & Me.tratativa.Text & _
+vbCrLf & "Data da Ocorrência:" & " " & Me.txt_data.Value & _
+  vbCrLf & _
+  vbCrLf & "Detalhes:" & "  " & Me.obs.Text & _
+  vbCrLf & _
+  vbCrLf & "Resposta:" & "  " & Me.resposta.Text & _
+  vbCrLf & _
+ vbCrLf & "Por gentileza conferir e validar!."
+
+.Subject = "..::Tratativa de DP Concluída::.."
+
+.Body = texto
+
+.Display 'Ou .Send para enviar direto
+ 
+End With
+ 
+Application.DisplayAlerts = True
+ 
+'Resetando a sessão
+Set OutMail = Nothing
+Set OutApp = Nothing
+
+
+
+
+ 
+End Sub
+
+Sub Envio4()
+
+  Dim OutApp As Outlook.Application
+Dim OutMail As Outlook.MailItem
+Dim texto
+
+ 
+'Criação e chamada do Objeto Outlook
+Set OutApp = CreateObject("Outlook.Application")
+Set OutMail = OutApp.CreateItem(olMailItem)
+ 
+Application.DisplayAlerts = False
+ 
+With OutMail
+
+
+ 
+.To = "kodash_yoko@hotmail.com"
+.CC = Me.Coordenador.Caption
+.BCC = ""
+
+texto = vbCrLf & Me.bomdia.Caption _
+       & vbCrLf & _
+       vbCrLf & _
+"Ola!, O Chamado do seu colaborador foi aberto com sucesso para tratativa! ," & " " & Me.Super.Text _
+& vbCrLf _
+& vbCrLf _
+& vbCrLf_ & "Matricula:" & Me.Matricula.Text & _
+ vbCrLf & "Nome:" & "  " & Me.NOMEC.Caption & _
+  vbCrLf & "Protocolo:" & "  " & Me.protocolo.Caption & _
+   vbCrLf & "Ocorrência:" & "  " & Me.Optionsele.Caption & _
+   vbCrLf & "Tratativa:" & "  " & Me.tratativa.Text & _
+vbCrLf & "Data da Ocorrência:" & " " & Me.txt_data.Value & _
+  vbCrLf & _
+  vbCrLf & "Detalhes:" & "  " & Me.obs.Text & _
+  vbCrLf & _
+  vbCrLf & "Resposta:" & "  " & Me.resposta.Text & _
+  vbCrLf & "N° do Chamado:" & "  " & Me.chamado.Text & _
+  vbCrLf & _
+ vbCrLf & "Por gentileza aguardar o retorno!."
+
+.Subject = "..::Tratativa de DP N° do Chamado::.."
+
+.Body = texto
+
+.Display 'Ou .Send para enviar direto
+ 
+End With
+ 
+Application.DisplayAlerts = True
+ 
+'Resetando a sessão
+Set OutMail = Nothing
+Set OutApp = Nothing
+
+
+
+
+ 
+End Sub
+
+
+Sub Envio5()
+
+  Dim OutApp As Outlook.Application
+Dim OutMail As Outlook.MailItem
+Dim texto
+
+ 
+'Criação e chamada do Objeto Outlook
+Set OutApp = CreateObject("Outlook.Application")
+Set OutMail = OutApp.CreateItem(olMailItem)
+ 
+Application.DisplayAlerts = False
+ 
+With OutMail
+
+
+ 
+.To = "kodash_yoko@hotmail.com"
+.CC = Me.Coordenador.Caption
+.BCC = ""
+
+texto = vbCrLf & Me.bomdia.Caption _
+       & vbCrLf & _
+       vbCrLf & _
+"Ola!, Não vai ser possivel realizar a tratativa do ponto do seu colaborador! ," & " " & Me.Super.Text _
+& vbCrLf _
+& vbCrLf _
+& vbCrLf_ & "Matricula:" & Me.Matricula.Text & _
+ vbCrLf & "Nome:" & "  " & Me.NOMEC.Caption & _
+  vbCrLf & "Protocolo:" & "  " & Me.protocolo.Caption & _
+   vbCrLf & "Ocorrência:" & "  " & Me.Optionsele.Caption & _
+   vbCrLf & "Tratativa:" & "  " & Me.tratativa.Text & _
+vbCrLf & "Data da Ocorrência:" & " " & Me.txt_data.Value & _
+  vbCrLf & _
+  vbCrLf & "Detalhes:" & "  " & Me.obs.Text & _
+  vbCrLf & _
+  vbCrLf & "Resposta:" & "  " & Me.resposta.Text & _
+  vbCrLf & "Motivo de não tratativa:" & "  " & Me.ntrata.Text & _
+  vbCrLf & _
+ vbCrLf & "Por gentileza verficar!."
+
+.Subject = "..::Tratativa de DP Recusado::.."
+
+.Body = texto
+
+.Display 'Ou .Send para enviar direto
+ 
+End With
+ 
+Application.DisplayAlerts = True
+ 
+'Resetando a sessão
+Set OutMail = Nothing
+Set OutApp = Nothing
+
+
+
+
+ 
+End Sub
+
+Sub Envio6()
+
+  Dim OutApp As Outlook.Application
+Dim OutMail As Outlook.MailItem
+Dim texto
+
+ 
+'Criação e chamada do Objeto Outlook
+Set OutApp = CreateObject("Outlook.Application")
+Set OutMail = OutApp.CreateItem(olMailItem)
+ 
+Application.DisplayAlerts = False
+ 
+With OutMail
+
+
+ 
+.To = "kodash_yoko@hotmail.com"
+.CC = Me.Coordenador.Caption
+.BCC = ""
+
+texto = vbCrLf & Me.bomdia.Caption _
+       & vbCrLf & _
+       vbCrLf & _
+"Ola!,A tratativa de DP do seu colaborador foi concluida com sucesso! ," & " " & Me.Super.Text _
+& vbCrLf _
+& vbCrLf _
+& vbCrLf_ & "Matricula:" & Me.Matricula.Text & _
+ vbCrLf & "Nome:" & "  " & Me.NOMEC.Caption & _
+  vbCrLf & "Protocolo:" & "  " & Me.protocolo.Caption & _
+   vbCrLf & "Ocorrência:" & "  " & Me.Optionsele.Caption & _
+   vbCrLf & "Tratativa:" & "  " & Me.tratativa.Text & _
+vbCrLf & "Data da Ocorrência:" & " " & Me.txt_data.Value & _
+  vbCrLf & _
+  vbCrLf & "Detalhes:" & "  " & Me.obs.Text & _
+  vbCrLf & _
+  vbCrLf & "Resposta:" & "  " & Me.resposta.Text & _
+  vbCrLf & "N° do Chamado:" & "  " & Me.chamado.Text & _
+  vbCrLf & _
+ vbCrLf & "Por gentileza conferir e validar!."
+
+.Subject = "..::Tratativa de DP Concluida::.."
+
+.Body = texto
+
+.Display 'Ou .Send para enviar direto
+ 
+End With
+ 
+Application.DisplayAlerts = True
+ 
+'Resetando a sessão
+Set OutMail = Nothing
+Set OutApp = Nothing
+
+
+
+
+ 
+End Sub
+
+
+
+Private Sub UserForm_Initialize()
+
+
+Dim MinhaHora
+MinhaHora = Hour(now)
+Select Case MinhaHora
+Case 0 To 5
+Me.bomdia.Caption = "Boa noite!"
+Case 6 To 11
+Me.bomdia.Caption = "Bom dia!"
+Case 12 To 17
+Me.bomdia.Caption = "Boa tarde!"
+Case 18 To 24
+Me.bomdia.Caption = "Boa noite!"
+End Select
+
+
+Call conectar
+
+Call filtro
+
+Call filtro1
+
+
+Call invi
+
+tratativa.List = Array("", "Abonar com BH", "Abono", "Reimporta marcação", "Compensar dia com BH")
+resposta.List = Array("", "Compensado", "Chamado aberto", "Tratado", "Não Tratado")
+resposta3.List = Array("", "Compensado", "Chamado aberto", "Tratado", "Não Tratado")
+Ocorrencia.List = Array("", "Atraso", "Saida antecipada", "Falta", "Folga")
+tratativa2.List = Array("", "Abonar com BH", "Abono", "Reimporta marcação", "Compensar dia com BH")
+validacao.List = Array("", "Validado", "Recusar")
+
+dataca.Caption = Date
+
+
+End Sub
+
+
+Sub invi()
+
+
+If Me.usuario.Text = "Admin" Then
+
+Me.resposta.Visible = True
+Me.chamado.Visible = True
+Me.Resposta1.Visible = True
+Me.Chamado1.Visible = True
+
+Else
+
+If Me.usuario.Text = "Usuario" Then
+
+resposta.Visible = False
+chamado.Visible = False
+Resposta1.Visible = False
+Chamado1.Visible = False
+
+Else
+
+If Me.usuario.Text = "" Then
+
+resposta.Visible = False
+chamado.Visible = False
+Resposta1.Visible = False
+Chamado1.Visible = False
+
+
+End If
+End If
+End If
+
+End Sub
+
+
+Private Sub validacao_Change()
+
+
+Call filtro1
+
+End Sub
+
+
+Option Explicit
+
+'Vetor que armazena todos os Label de dia do Calendário
+Dim Rótulos() As New cCalendário
+
+Function GetCalendário() As Date
+        
+    Dim lTotalRótulos As Long
+    Dim ctrl As control
+    Dim frm As frmCalendário
+    
+    Set frm = New frmCalendário
+    
+    'Atribui cada um dos Label num elemento do vetor da classe
+    For Each ctrl In frm.Controls
+        If ctrl.Name Like "l?c?" Then
+            lTotalRótulos = lTotalRótulos + 1
+            ReDim Preserve Rótulos(1 To lTotalRótulos)
+            Set Rótulos(lTotalRótulos).lblGrupo = ctrl
+        End If
+    Next ctrl
+
+    frm.Show
+    
+    'Se a data escolhida for nula ou inválida, retorna-se a data atual:
+    If IsDate(frm.Tag) Then
+        GetCalendário = frm.Tag
+    Else
+        GetCalendário = Date
+    End If
+        
+    Unload frm
+
+End Function
+
+
+
+Public Miconexao As New ADODB.Connection
+
+Public rs As New ADODB.Recordset
+
+Sub conectar()
+
+Set Miconexao = New ADODB.Connection
+
+With Miconexao
+
+.Provider = "Microsoft.ACE.OLEDB.12.0"
+ .ConnectionString = "Data Sourcer = " & ThisWorkbook.Path & "TratativaDP.mdb"
+
+.Open "C:\Users\claudio\Downloads\TratativaDP.mdb"
+
+
+ End With
+ 
+ 
+End Sub
+ Sub desconectar()
+ 
+Set rs = Nothing
+ 
+Set Miconexao = Nothing
+
+
+ End Sub
+
